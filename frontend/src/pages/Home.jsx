@@ -3,11 +3,18 @@ import { Stepper, Step } from 'react-form-stepper';
 import Step1 from './Step1';
 import Step2 from './Step2';
 import Step3 from './Step3';
+import { AppContext } from '../context/AppContext';
 
 const Home = () => {
-    const [activeStep, setActiveStep] = useState(0);
+    const { activeStep, setActiveStep, isLogged, setIsLogged} = useContext(AppContext);
 
-    const handleNext = () => setActiveStep(prev => Math.min(prev + 1, 2));
+    const handleNext = () => {
+        setActiveStep(prev => Math.min(prev + 1, 2));
+        if (!isLogged) {
+            setIsLogged(true);
+        }
+    };
+
     const handleBack = () => setActiveStep(prev => Math.max(prev - 1, 0));
 
     const renderStepContent = (step) => {
@@ -32,7 +39,7 @@ const Home = () => {
         </div>
 
         <div className="flex justify-between mt-4">
-            {activeStep > -1 ? (
+            {activeStep > 1 ? (
             <button
             onClick={handleBack}
             disabled={activeStep === 0}
