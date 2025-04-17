@@ -20,7 +20,7 @@ const Home = () => {
     };
 
   return (
-    <div>
+    <div className='mb-5'>
         <Stepper styleConfig={{activeBgColor: '#000000', completedBgColor: '#444444'}} activeStep={activeStep}>
             <Step label="Step 1" />
             <Step label="Step 2" />
@@ -32,6 +32,7 @@ const Home = () => {
         </div>
 
         <div className="flex justify-between mt-4">
+            {activeStep > -1 ? (
             <button
             onClick={handleBack}
             disabled={activeStep === 0}
@@ -39,20 +40,21 @@ const Home = () => {
             >
             Previous
             </button>
+            ) : (<span/>)}
 
             {activeStep < 2 ? (
             <button
                 onClick={handleNext}
                 className="px-4 py-2 bg-blue-500 text-white rounded"
             >
-                Next
+                {activeStep > 0 ? 'Next' : 'Login'}
             </button>
             ) : (
             <button
                 onClick={() => alert('Submit the form')}
                 className="px-4 py-2 bg-green-500 text-white rounded"
             >
-                Submit
+                Finish
             </button>
             )}
         </div>

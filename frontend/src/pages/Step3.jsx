@@ -1,9 +1,14 @@
 import React from 'react'
+import AboutMe from '../components/AboutMe'
+import Address from '../components/Address'
+import BirthDate from '../components/BirthDate'
 
 const Step3 = () => {
   return (
     <div>
-      <p>Step 3 homepage</p>
+      <AboutMe />
+      <Address />
+      <BirthDate />
     </div>
   )
 }
