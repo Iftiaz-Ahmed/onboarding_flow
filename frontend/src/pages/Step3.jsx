@@ -5,12 +5,12 @@ import BirthDate from '../components/BirthDate'
 import { AppContext } from '../context/AppContext'
 
 const Step3 = () => {
-    const {pageThreeComponent} = useContext(AppContext);
+    const {stepThreeComponent} = useContext(AppContext);
   return (
     <div>
-      {pageThreeComponent[0] && <AboutMe />}
-      {pageThreeComponent[1] && <BirthDate />}
-      {pageThreeComponent[2] && <Address />}
+      {stepThreeComponent[0] && <AboutMe />}
+      {stepThreeComponent[1] && <BirthDate />}
+      {stepThreeComponent[2] && <Address />}
     </div>
   )
 }

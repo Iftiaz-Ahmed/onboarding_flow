@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 
 const AdminPage = () => {
+    
     const [pageTwoComponents, setPageTwoComponents] = useState([true, false, false]);
 
     const toggleOption2 = (index) => {
