@@ -1,9 +1,22 @@
-import React, {useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { AppContext } from '../context/AppContext';
 
 const BirthDate = () => {
     const [birthdate, setBirthdate] = useState(null);
+    const {user, setUser} = useContext(AppContext);
+
+    useEffect(() => {
+        if (user?.birthdate != null) {
+          const parsedDate = new Date(user.birthdate);
+      
+          if (!isNaN(parsedDate)) {
+            setBirthdate(parsedDate);
+          }
+        }
+      }, [user]);
+
     return (
         <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">Birthdate</label>
@@ -12,6 +25,10 @@ const BirthDate = () => {
                 onChange={(date) => {
                 if (date) {
                     setBirthdate(date);
+                    setUser((prevUser) => ({
+                        ...prevUser,
+                        birthdate: date,
+                    }));
                 }
                 }}
                 dateFormat="MMMM d, yyyy"

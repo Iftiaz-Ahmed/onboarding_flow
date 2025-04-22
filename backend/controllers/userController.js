@@ -12,7 +12,7 @@ const loginUser = async (req, res) => {
 
         if (exists) {
             if (password == exists.password) {
-                return res.json({success: true});
+                return res.json({success: true, data: exists});
             } else {
                 return res.json({success: false, message: "Already a user, but password doesn't match!"});
             }
@@ -27,7 +27,8 @@ const loginUser = async (req, res) => {
             password,
             aboutMe: "",
             birthdate: null,
-            address: null
+            address: null,
+            activeStep: 0
         })
 
         const user = await newUser.save()
@@ -44,24 +45,46 @@ const loginUser = async (req, res) => {
 
 const updateUserData = async (req, res) => {
     try {
-
-        const { email, aboutMe, birthdate, address } = req.body;
-
-        const user = await userModel.findOne({ email: email });
-
-        user.aboutMe = aboutMe;
-        user.birthdate = birthdate;
-        user.address = address
-
-        const updatedData = await user.save();
-
-        res.json({success: true, message: "Data added successfully!", data: updatedData})
-
+      const { email, aboutMe, birthdate, address, activeStep } = req.body;
+  
+      if (!email) {
+        return res.status(400).json({
+          success: false,
+          message: "Email is required to update user.",
+        });
+      }
+  
+      const user = await userModel.findOne({ email });
+  
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: "User not found with this email.",
+        });
+      }
+  
+      user.aboutMe = aboutMe;
+      user.birthdate = birthdate;
+      user.address = address;
+      user.activeStep = activeStep;
+  
+      const updatedData = await user.save();
+  
+      return res.json({
+        success: true,
+        message: "Data updated successfully!",
+        data: updatedData,
+      });
+  
     } catch (error) {
-        console.log(error);
-        res.json({success: false, message: error.message});
+      console.error("Update user error:", error);
+      return res.status(500).json({
+        success: false,
+        message: error.message || "Internal server error",
+      });
     }
-}
+};
+  
 
 //user list
 

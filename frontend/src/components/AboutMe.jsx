@@ -1,6 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AppContext } from '../context/AppContext';
 
-const AboutMe = ({ value, onChange }) => {
+const AboutMe = () => {
+  const {user, setUser} = useContext(AppContext);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setUser((prevUser) => ({
+      ...prevUser,
+      [name]: value,
+    }));
+  };
+
   return (
     <div className="mb-6">
       <label htmlFor="aboutMe" className="block text-lg font-semibold mb-2">
@@ -9,8 +20,8 @@ const AboutMe = ({ value, onChange }) => {
       <textarea
         id="aboutMe"
         name="aboutMe"
-        value={value}
-        onChange={onChange}
+        value={user?.aboutMe != null ? user.aboutMe : ""}
+        onChange={handleInputChange}
         rows="6"
         className="w-full p-4 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-black-500"
         placeholder="Tell us a bit about yourself..."

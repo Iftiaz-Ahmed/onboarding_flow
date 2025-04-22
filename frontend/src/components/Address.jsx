@@ -1,8 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AppContext } from '../context/AppContext';
 
-const Address = ({ addressData: addressData, setAddressData }) => {
-  const handleChange = (e) => {
-    setFormData({ ...addressData, [e.target.name]: e.target.value });
+const Address = () => {
+
+  const {user, setUser} = useContext(AppContext);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setUser((prevUser) => ({
+      ...prevUser,
+      address: {
+        ...prevUser.address,
+        [name]: value,
+      },
+    }));
   };
 
   return (
@@ -15,8 +26,8 @@ const Address = ({ addressData: addressData, setAddressData }) => {
         <input
           type="text"
           name="street"
-          value={addressData?.street || ''}
-          onChange={handleChange}
+          value={user?.address?.street != null ? user.address.street : ""}
+          onChange={handleInputChange}
           className="w-full p-2 border border-gray-300 rounded"
         />
       </div>
@@ -26,8 +37,8 @@ const Address = ({ addressData: addressData, setAddressData }) => {
         <input
           type="text"
           name="city"
-          value={addressData?.city || ''}
-          onChange={handleChange}
+          value={user?.address?.city != null ? user.address.city : ""}
+          onChange={handleInputChange}
           className="w-full p-2 border border-gray-300 rounded"
         />
       </div>
@@ -37,8 +48,8 @@ const Address = ({ addressData: addressData, setAddressData }) => {
         <input
           type="text"
           name="state"
-          value={addressData?.state || ''}
-          onChange={handleChange}
+          value={user?.address?.state != null ? user.address.state : ""}
+          onChange={handleInputChange}
           className="w-full p-2 border border-gray-300 rounded"
         />
       </div>
@@ -48,8 +59,8 @@ const Address = ({ addressData: addressData, setAddressData }) => {
         <input
           type="text"
           name="zip"
-          value={addressData?.zip || ''}
-          onChange={handleChange}
+          value={user?.address?.zip != null ? user.address.zip : ""}
+          onChange={handleInputChange}
           className="w-full p-2 border border-gray-300 rounded"
         />
       </div>

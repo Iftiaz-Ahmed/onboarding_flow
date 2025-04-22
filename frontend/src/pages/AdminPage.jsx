@@ -1,9 +1,33 @@
-import React, { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
+import axios from 'axios'
+import { backendUrl } from '../App';
 
 const AdminPage = () => {
     
-    const [pageTwoComponents, setPageTwoComponents] = useState([true, false, false]);
+    const [pageTwoComponents, setPageTwoComponents] = useState([1, 0, 0]);
+
+    const updateDB = async (page, array) => {
+        try {
+            let response;
+            if (page === 'two') {
+                const secondStep = array;
+                const thirdStep = pageThreeComponents;
+                response = await axios.post(backendUrl + '/api/admin/updateComponent', { secondStep, thirdStep });
+            } else {
+                const secondStep = pageTwoComponents;
+                const thirdStep = array;
+                response = await axios.post(backendUrl + '/api/admin/updateComponent', { secondStep, thirdStep });
+            }
+            
+            console.log(response);
+            if (!response.data.success) {
+                toast.error(response.data.message);
+            }
+        } catch (error) {
+            toast.error(error);
+        }
+    }
 
     const toggleOption2 = (index) => {
         const enabledCount2 = pageTwoComponents.filter((v) => v).length;
@@ -13,13 +37,15 @@ const AdminPage = () => {
             toast.error("Should have atleast one component!");
             return;
         }
-        updated2[index] = !pageTwoComponents[index];
+        updated2[index] = pageTwoComponents[index] === 1 ? 0 : 1;
         setPageTwoComponents(updated2);
+
+        updateDB('two', updated2);
     };
 
     const labels2 = ['About Me', 'Birth Date', 'Address'];
 
-    const [pageThreeComponents, setPageThreeComponents] = useState([false, false, true]);
+    const [pageThreeComponents, setPageThreeComponents] = useState([0, 0, 1]);
 
     const toggleOption3 = (index) => {
         const enabledCount3 = pageThreeComponents.filter((v) => v).length;
@@ -29,11 +55,29 @@ const AdminPage = () => {
             toast.error("Should have atleast one component!");
             return;
         }
-        updated3[index] = !pageThreeComponents[index];
+        updated3[index] = pageThreeComponents[index] === 1 ? 0 : 1;
         setPageThreeComponents(updated3);
+
+        updateDB('three', updated3);
     };
 
     const labels3 = ['About Me', 'Birth Date', 'Address'];
+
+    const fetchData = async () => {
+        try {
+          const response = await axios.get(backendUrl + '/api/admin/component');
+          if (response.data.success) {
+            setPageTwoComponents(response.data.component[0].secondStep)
+            setPageThreeComponents(response.data.component[0].thirdStep)
+          }
+        } catch (error) {
+          toast.error(error)
+        }
+      }
+  
+      useEffect(() => {
+        fetchData();  
+      }, [])
 
   return (
     <div>
